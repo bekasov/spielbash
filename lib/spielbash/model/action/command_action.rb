@@ -12,11 +12,10 @@ module Spielbash
         session.send_key(c)
         sleep(action_context.typing_delay_s)
       end
+      sleep(action_context.reading_delay_s)
       session.send_key('C-m')
 
       session.wait if action_context.wait
-
-      sleep(action_context.reading_delay_s)
     end
   end
 end
