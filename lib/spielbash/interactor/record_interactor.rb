@@ -67,6 +67,12 @@ module Spielbash
                  when scene.has_key?('tmux_command') then
                    cmd = scene['tmux_command']
                    Spielbash::TmuxCommandAction.new(cmd, action_context)
+                 when scene.has_key?('read_file') then
+                   cmd = scene['read_file']
+                   Spielbash::ReadFileAction.new(cmd, action_context)
+                 when scene.has_key?('background_command') then
+                   cmd = scene['background_command']
+                   Spielbash::BackgroundCommandAction.new(cmd, action_context)
                  else
                    not_implemented
                  end

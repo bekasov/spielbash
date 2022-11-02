@@ -46,6 +46,8 @@ module Spielbash
       key = case key
               when ' ' then 'Space'
               when ';' then '\\;'
+              when '\t' then 'Tab'
+              when '	' then 'Tab'
               else key
             end
       execute_tmux_with("send-keys -t #{name} -N #{count} #{key}", true)
@@ -60,22 +62,6 @@ module Spielbash
 
     def execute_tmux_with(arguments, wait = false)
       execute_with('tmux', arguments, wait)
-    end
-
-    private
-
-    def exec_wait_check_cmd(pid)
-      if is_real_environment
-        execute_with('pgrep', "-P #{pid}", true)
-      else
-        cmd = context.wait_check_cmd.split
-        execute_with_exactly(cmd.first, true, false, true, *cmd.drop(1))
-      end
-    end
-
-    def execute_with(cmd, arguments, wait = false, leader = true, io_inherit = false)
-      args = arguments.split
-      execute_with_exactly cmd, wait, io_inherit, leader, *args
     end
 
     def execute_with_exactly(cmd, wait, io_inherit, leader, *arguments)
@@ -97,6 +83,22 @@ module Spielbash
       end
 
       process
+    end
+
+    private
+
+    def exec_wait_check_cmd(pid)
+      if is_real_environment
+        execute_with('pgrep', "-P #{pid}", true)
+      else
+        cmd = context.wait_check_cmd.split
+        execute_with_exactly(cmd.first, true, false, true, *cmd.drop(1))
+      end
+    end
+
+    def execute_with(cmd, arguments, wait = false, leader = true, io_inherit = false)
+      args = arguments.split
+      execute_with_exactly cmd, wait, io_inherit, leader, *args
     end
 
     def is_real_environment
